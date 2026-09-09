@@ -1,8 +1,7 @@
 # data/raw -- the corpora, which are NOT in this repository
 
 About 30 GB of audio lives here and is deliberately gitignored. This file is
-committed so that a fresh clone has the directory structure the project expects;
-the contents you have to obtain yourself.
+committed so that a fresh clone has the directory structure the project expects.
 
 Expected layout (paths are configurable in `config.yaml` under `datasets:`):
 

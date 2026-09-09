@@ -29,6 +29,23 @@ LOGGER = get_logger("gbmc.submission")
 #: quarantined synthetic-smoke artifacts; see that directory's README
 EXCLUDE_PREFIXES = ("results/_synthetic_smoke/",)
 
+#: Internal working documents. They record how the project was run rather than
+#: what it produced, none is referenced by the paper, and the two logs in
+#: particular are phase-by-phase development notes that a marker has no reason
+#: to read. Everything the paper cites stays in -- notably report/fill_report.py,
+#: which Appendix A names by path, and data/raw/README.md, which is the only
+#: reason data/raw/ exists in a checkout at all.
+EXCLUDE_FILES = frozenset({
+    "KAGGLE_RUNBOOK.md",
+    "PROGRESS.md",
+    "report/README.md",
+    "state/SESSION_LOG.md",
+    "state/SUBMISSION_CHECKLIST.md",
+    "state/env_report.md",
+    "state/kaggle_c4_instructions.md",
+    "state/vram_report.md",
+})
+
 #: the five items the brief requires, and where each lives
 REQUIRED = {
     "1. source code": "src/train.py",
@@ -65,7 +82,7 @@ def main(argv=None) -> int:
 
     kept, skipped, absent = [], [], []
     for rel in files:
-        if rel.startswith(EXCLUDE_PREFIXES):
+        if rel.startswith(EXCLUDE_PREFIXES) or rel in EXCLUDE_FILES:
             skipped.append(rel)
             continue
         if not (root / rel).is_file():
