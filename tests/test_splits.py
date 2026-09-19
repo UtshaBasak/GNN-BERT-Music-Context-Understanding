@@ -271,3 +271,39 @@ def test_musiccaps_ytid_survives_ids_containing_dashes_and_underscores():
     assert musiccaps_ytid("musiccaps_-0Gj8-vB1q4_30_40") == "-0Gj8-vB1q4"
     assert musiccaps_ytid("musiccaps_a_b_c_10_20") == "a_b_c"
     assert musiccaps_ytid("-0Gj8-vB1q4_30_40") == "-0Gj8-vB1q4"
+
+
+# --------------------------------------------------------------------------- #
+# committed manifests must work on a machine that is not the one that built them
+# --------------------------------------------------------------------------- #
+def test_committed_manifests_hold_no_absolute_paths():
+    """An absolute path in a committed manifest resolves nowhere else.
+
+    The manifests are the only preprocessing this repository ships. Storing
+    `B:\...` in them makes that shipment useless to anyone who clones it, and
+    publishes the directory layout of the machine that built it. `load_audio`
+    runs every path through `resolve_path`, which joins a relative path onto
+    the repository root, so the relative form is what belongs on disk.
+    """
+    import csv
+
+    from src.utils import project_root
+
+    splits = project_root() / "data" / "splits"
+    offenders = {}
+    for path in sorted(splits.glob("*_manifest.csv")):
+        with path.open(encoding="utf-8", newline="") as handle:
+            reader = csv.DictReader(handle)
+            if "audio_path" not in (reader.fieldnames or []):
+                continue
+            bad = [row["audio_path"] for row in reader
+                   if row["audio_path"] and (
+                       row["audio_path"][1:3] == ":\\"
+                       or row["audio_path"].startswith("/"))]
+        if bad:
+            offenders[path.name] = (len(bad), bad[0])
+
+    assert not offenders, (
+        "absolute audio paths in committed manifests: "
+        + "; ".join(f"{n} in {f} (e.g. {ex})" for f, (n, ex) in offenders.items())
+    )

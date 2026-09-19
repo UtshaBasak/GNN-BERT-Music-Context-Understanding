@@ -29,6 +29,7 @@ import numpy as np
 import pandas as pd
 
 from .utils import (atomic_write_text, ensure_dir, get_logger, load_config,
+                    project_root,
                     resolve_path)
 
 LOGGER = get_logger("gbmc.splits")
@@ -111,6 +112,28 @@ _MTAT_TEST_DIRS = set("def")
 # --------------------------------------------------------------------------- #
 # manifest io
 # --------------------------------------------------------------------------- #
+def _portable(path) -> str:
+    """A manifest path that survives being cloned onto another machine.
+
+    Manifests are committed, so an absolute path in one publishes the layout of
+    the machine that built it and resolves nowhere else. Paths are stored
+    relative to the repository root with forward slashes; ``load_audio`` runs
+    them back through ``resolve_path``, which leaves an absolute path alone and
+    joins a relative one onto the root.
+    """
+    path = Path(path)
+    root = project_root()
+    # Deliberately not resolve(): data/raw/<corpus> is typically a junction to
+    # the corpus stored outside the repository, and following it would land
+    # outside the root and defeat the point.
+    absolute = path if path.is_absolute() else (root / path)
+    try:
+        return absolute.relative_to(root).as_posix()
+    except ValueError:
+        # genuinely outside the repository: nothing relative to express
+        return absolute.as_posix()
+
+
 def write_manifest(df: pd.DataFrame, path) -> Path:
     """Persist a manifest with exactly the contract columns, in order."""
     out = resolve_path(path)
@@ -270,7 +293,7 @@ def build_mtat_splits(cfg, validate_audio: bool = False) -> pd.DataFrame:
         rows.append({
             "track_id": f"mtat_{clip_id}",
             "artist_id": _slug(artist) or f"mtat_unknown_{clip_id}",
-            "audio_path": str(audio_root / rel),
+            "audio_path": _portable(audio_root / rel),
             # metadata only. Putting the tags here would let Task 1 read
             # its own labels out of Xtext, which is degenerate by construction.
             "text": mtat_metadata_text(title, album, artist),
@@ -391,7 +414,7 @@ def build_fma_splits(cfg, validate_audio: bool = False) -> pd.DataFrame:
         rows.append({
             "track_id": f"fma_{tid:06d}",
             "artist_id": _slug(artist) or f"fma_unknown_{tid}",
-            "audio_path": str(audio_root / rel),
+            "audio_path": _portable(audio_root / rel),
             "text": f"{title} by {artist}. genre: {genre}.",
             "split": split,
             "y_genre": int(genre_index.get(genre, -1)),
@@ -454,7 +477,7 @@ def build_deam_splits(cfg, validate_audio: bool = False, seed: int = 42) -> pd.D
         rows.append({
             "track_id": f"deam_{song_id}",
             "artist_id": _slug(artist) or f"deam_unknown_{song_id}",
-            "audio_path": str(audio_root / f"{song_id}.mp3"),
+            "audio_path": _portable(audio_root / f"{song_id}.mp3"),
             "text": f"{title} by {artist}. genre: {genre}." if title else f"deam excerpt {song_id}",
             "split": "train",     # overwritten by the artist-grouped assignment below
             "y_genre": -1,

@@ -84,10 +84,15 @@ def load_audio(path, sr: int = 22050, mono: bool = True, duration=None,
     Raises on an undecodable file rather than returning silence -- a 0-byte
     yt-dlp artefact must fail loudly at manifest-build time, not become a track
     of zeros that quietly trains the model on nothing.
+
+    ``path`` may be absolute or relative to the repository root. The committed
+    manifests store the relative form so they work on any machine; a manifest
+    built locally holds absolute paths and is passed through unchanged.
     """
     import librosa
 
-    y, _ = librosa.load(str(path), sr=sr, mono=mono, duration=duration, offset=offset)
+    y, _ = librosa.load(str(resolve_path(path)), sr=sr, mono=mono,
+                        duration=duration, offset=offset)
     y = np.asarray(y, dtype=np.float32)
     if y.size == 0:
         raise ValueError(f"decoded zero samples from {path}")
