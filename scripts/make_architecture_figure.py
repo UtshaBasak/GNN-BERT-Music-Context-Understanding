@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-"""D6.2: the architecture diagram the report was missing.
+"""the architecture diagram the report was missing.
 
     python scripts/make_architecture_figure.py
 
 The Method section describes the model in equations, which is precise and hard
-to hold in the head. The grading rubric asks for diagrams and the report had
+to hold in the head. The report had
 none of the model itself -- every figure was a result. This draws the one
 picture that makes the four tasks legible as variations on a shared
 representation: which encoder each task uses, where the frozen node-feature

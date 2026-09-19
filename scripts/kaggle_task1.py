@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""A6.4 — the Task 1 sweep, written to run unattended on Kaggle.
+"""the Task 1 sweep, written to run unattended on Kaggle.
 
 Paste this into a Kaggle notebook cell (or add it as a utility script) after
 attaching `kaggle_payload_task1.tar.gz` as a dataset, then use **Save & Run All**

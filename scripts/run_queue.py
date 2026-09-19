@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Phase C: run the local queue unattended, with a watchdog rather than a halt.
+"""run the local queue unattended, with a watchdog rather than a halt.
 
     python scripts/run_queue.py                 # run it
     python scripts/run_queue.py --plan          # show the queue and skip states
@@ -149,7 +149,7 @@ def build_queue() -> list[Step]:
              requires_text=["genre_rewired", "macro_f1"],
              estimate_min=35),
 
-        # ---- C2: the 22-mark core exists ---------------------------------- #
+        # ---- C2: the fusion headline -------------------------------------- #
         Step("C2 Task 3 headline (MTAT, bert-base)", "C2",
              _train(3, "mtat_cross_attention_headline",
                     ["bert.model_name=bert-base-uncased",

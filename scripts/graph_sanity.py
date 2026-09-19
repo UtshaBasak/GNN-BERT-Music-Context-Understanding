@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""A4.4 — the gate you cannot skip: do similarity edges connect repeated sections?
+"""the gate you cannot skip: do similarity edges connect repeated sections?
 
     python scripts/graph_sanity.py [--dataset mtat] [--n 5] [--strict]
 

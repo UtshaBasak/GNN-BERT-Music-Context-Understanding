@@ -522,7 +522,7 @@ def _graph_summary(data: Data) -> dict[str, Any]:
 
 
 def export_sample_graphs(manifest, out_dir="data/processed/sample_graphs", n: int = 20) -> list:
-    """Write >= ``n`` graphs plus JSON summaries -- a graded deliverable.
+    """Write >= ``n`` graphs plus JSON summaries, as runnable examples.
 
     ``manifest`` may be a list of ``Data`` objects, a directory of ``.pt``
     graphs, or a DataFrame/manifest path that a

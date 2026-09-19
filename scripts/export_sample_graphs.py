@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Export >= 20 sample graphs to ``data/processed/sample_graphs/``.
 
-This directory is a graded deliverable and is the one exception to the
+This directory is the one exception to the
 "no binaries in git" rule -- see ``.gitignore``. Each ``.pt`` ships with a
 ``.json`` summary so a reader can check the data contract without loading torch.
 
@@ -97,7 +97,7 @@ def _source(cfg, synthetic: bool, limit: int):
 
 
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(description="Export sample graphs (graded deliverable).")
+    parser = argparse.ArgumentParser(description="Export a sample of stored segment graphs.")
     parser.add_argument("--config", default="config.yaml")
     parser.add_argument("--synthetic", action="store_true")
     parser.add_argument("--n", type=int, default=20)
@@ -109,7 +109,7 @@ def main(argv=None) -> int:
     cfg = load_config(args.config)
     n = max(20, int(args.n))             # the deliverable requires at least 20
     graphs, source = _source(cfg, args.synthetic, n)
-    # A0.1 guard: the committed sample graphs are a graded deliverable, so a
+    # The committed sample graphs are the repository's runnable examples, so a
     # synthetic one slipping in is a submission failure, not a warning.
     guard_against_synthetic(graphs, args.synthetic, "the graphs being exported")
     if len(graphs) < 20:

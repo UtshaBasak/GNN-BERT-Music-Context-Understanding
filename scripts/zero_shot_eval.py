@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""B2.3: zero-shot tagging through the contrastive encoder, and what it costs.
+"""zero-shot tagging through the contrastive encoder, and what it costs.
 
     python scripts/zero_shot_eval.py --seed 42
 

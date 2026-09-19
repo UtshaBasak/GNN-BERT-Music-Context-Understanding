@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""B4: parse a Google Forms export and report what the ratings actually show.
+"""Parse a Google Forms export and report what the ratings actually show.
 
     python scripts/analyse_human_eval.py
 

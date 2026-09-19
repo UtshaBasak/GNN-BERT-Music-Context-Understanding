@@ -700,7 +700,7 @@ def main(argv=None) -> int:
             mel_h5=mel_h5, mel_frames=args.mel_frames,
         )
 
-        # A3.6: normalisation statistics come from the TRAIN split only, and the
+        # normalisation statistics come from the TRAIN split only, and the
         # provenance is recorded so a later run can assert it rather than trust it.
         if not args.skip_norm_stats:
             try:

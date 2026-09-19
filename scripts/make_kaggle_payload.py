@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""A6.3 — build the upload archive for Kaggle.
+"""build the upload archive for Kaggle.
 
     python scripts/make_kaggle_payload.py [--out kaggle_payload.tar.gz]
 

@@ -169,7 +169,7 @@ def test_written_manifest_has_the_contract_columns(tmp_path):
 
 
 # --------------------------------------------------------------------------- #
-# A7.3 -- the tag vocabularies must be selected on the train split only
+# the tag vocabularies must be selected on the train split only
 #
 # Choosing *which labels exist* by frequency over the whole corpus lets
 # test-split annotations decide the label space. That is label information

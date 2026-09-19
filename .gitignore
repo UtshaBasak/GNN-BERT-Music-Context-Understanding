@@ -151,6 +151,11 @@ results/checkpoints/
 # Quarantined synthetic-smoke artifacts (see its README). Never submitted.
 results/_synthetic_smoke/
 
+# Run telemetry: queue state, probe outputs, per-run logs and upload manifests.
+# The scripts that write these create the directory on demand, so it is a build
+# artifact rather than source and does not belong in version control.
+state/
+
 # upload payloads are rebuilt on demand by scripts/make_kaggle_payload.py
 kaggle_payload*.tar.gz
 *.tar.gz

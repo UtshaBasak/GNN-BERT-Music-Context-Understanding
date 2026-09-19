@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""C4: the seven-mode Task 3 fusion ablation, sharded across Kaggle GPUs.
+"""the seven-mode Task 3 fusion ablation, sharded across Kaggle GPUs.
 
     python scripts/kaggle_ablation.py --shard 0 --shards 2
     python scripts/kaggle_ablation.py --shards 2 --dry-run     # check the split

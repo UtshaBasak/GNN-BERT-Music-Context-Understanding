@@ -278,7 +278,7 @@ def test_no_accuracy_function_is_exported():
 
 
 # --------------------------------------------------------------------------- #
-# A7.1 -- single-label multiclass metrics
+# single-label multiclass metrics
 # --------------------------------------------------------------------------- #
 def test_multiclass_metrics_perfect_prediction():
     y = np.array([0, 1, 2, 3, 0, 1, 2, 3])
@@ -313,7 +313,7 @@ def test_multiclass_chance_level_is_near_one_over_k():
 
 
 # --------------------------------------------------------------------------- #
-# A7.4 -- bootstrapped threshold stability
+# bootstrapped threshold stability
 # --------------------------------------------------------------------------- #
 def _separable(n_rows, n_tags, seed=0, noise=1.0):
     rng = np.random.default_rng(seed)

@@ -113,7 +113,7 @@ def main(argv=None) -> int:
                 rejected.append((path.name, f"thresholds from {source_of_thresholds}"))
                 continue
 
-            # C4: a result computed elsewhere is only comparable if it was
+            # a result computed elsewhere is only comparable if it was
             # scored against a label space this repository still uses. A7.3
             # changed 7 of the 50 MusicCaps tags, so a run from before that is
             # numerically fine and semantically incompatible -- and nothing

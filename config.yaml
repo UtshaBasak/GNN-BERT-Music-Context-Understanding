@@ -60,13 +60,13 @@ segmentation:
 graph:
   knn_k: 4                    # k-NN, NOT a fixed cosine threshold tau
   add_self_loops: true
-  # B0.1 edge-type ablation runs through these two flags: both true is the
+  # edge-type ablation runs through these two flags: both true is the
   # headline, similarity_edges=false is temporal-only, temporal_edges=false is
   # similarity-only. They are honoured at graph-build time, and MusicGraphDataset
   # builds on the fly, so an --override is enough -- no cache rebuild.
   temporal_edges: true
   similarity_edges: true
-  # B0.1 structural control. Degree-preserving double-edge swaps, seeded per
+  # structural control. Degree-preserving double-edge swaps, seeded per
   # track so a clip is rewired identically in every epoch. If macro-F1 survives
   # this, the topology carried no signal and the GNN is a pooled-feature MLP.
   rewire: false
@@ -132,7 +132,7 @@ multitask:
   beta_arousal: 1.0
   auto_balance: true          # rescale by running loss magnitude
   ema_decay: 0.98             # smoothing for the running loss magnitudes
-  # B1.2 -- DEAM has ~1,200 train tracks against MTAT's 16,881, about 1:14.
+  # DEAM has ~1,200 train tracks against MTAT's 16,881, about 1:14.
   # One-for-one alternation shows the emotion head every DEAM track fourteen
   # times per MTAT epoch and it overfits hard while the tag head sees each
   # example once. 4 tag batches : 1 emotion batch, recorded in every result.
@@ -163,7 +163,7 @@ train:
   tensorboard: false
 
 # ---------------------------------------------------------------------------
-# A0.6 -- what goes into Xtext, and why it is not the labels.
+# what goes into Xtext, and why it is not the labels.
 #
 # MTAT ships NO captions or lyrics, only tags. Feeding a track's tags in to
 # predict those same tags is degenerate. MusicCaps captions are written *from*
@@ -196,7 +196,7 @@ data:
   caption_corpora: [musiccaps]        # Task 4 retrieval
   genre_corpora: [fma]                # Task 2 headline; the only genre labels
 
-  # A7.1 -- Task 2 has two reported domains and `genre` is the headline, because
+  # Task 2 has two reported domains and `genre` is the headline, because
   # that is what the deliverable asks for: 8-way single-label classification on
   # FMA-small. The split is near-balanced (train 797-801, val 98-100, test
   # 100-101 per class), so chance sits at 12.5% and plain accuracy is meaningful
@@ -236,7 +236,7 @@ eval:
   retrieval_examples: 10
 
 # ---------------------------------------------------------------------------
-# A7.2 -- B2 (mel CNN) is compared on compute budget, not parameter count.
+# B2 (mel CNN) is compared on compute budget, not parameter count.
 # Matching it to the GNN's ~430k parameters is what produced the implausible
 # 0.1654 macro-F1; a short-chunk CNN at ~3.4M parameters is the standard MTAT
 # baseline. It reads data/processed/mels_full_{corpus}.h5 at the native 43.07
@@ -261,7 +261,7 @@ baselines:
   cnn_use_accumulation: false # batch 32 fits; turn on if the card gets smaller
 
 # ---------------------------------------------------------------------------
-# B0.5 -- mood labels for the t-SNE panels.
+# mood labels for the t-SNE panels.
 #
 # Neither corpus ships a mood field, so both colourings are DEFINED here rather
 # than chosen at plot time, where the temptation is to pick whichever subset

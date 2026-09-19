@@ -182,7 +182,7 @@ def generate_case_studies(bundle, cfg, device, seed: int, out_dir,
     out = ensure_dir(out_dir)
     set_seed(seed)
 
-    # Phase C 4.3: the case studies must come from the MusicCaps fusion model.
+    # the case studies must come from the MusicCaps fusion model.
     # MTAT's text channel is title/album/artist metadata, so a token-alignment
     # map over it shows a graph attending to an artist name -- uninformative by
     # construction. The default tag therefore names the MusicCaps run.

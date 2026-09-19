@@ -93,7 +93,8 @@ def tune_thresholds(
 
     **Call this on the validation split only.** The returned vector is frozen
     and handed to the test evaluation; tuning on test inflates every number in
-    the report and is the single easiest way to fail a fair-setup rubric.
+    every downstream number and is the easiest way to report a result that
+    cannot be reproduced.
 
     Ties are broken toward the *larger* threshold (more conservative), and a tag
     with no positive validation example keeps ``default``.
@@ -334,7 +335,7 @@ def retrieval_metrics(sim: np.ndarray, ks: Sequence[int] = (1, 5, 10)) -> dict:
         out[f"mean_R@{k}"] = float((out[f"g2t_R@{k}"] + out[f"t2g_R@{k}"]) / 2)
     out["mean_MRR"] = float((out["g2t_MRR"] + out["t2g_MRR"]) / 2)
 
-    # B2.2: the chance reference travels with the numbers rather than being
+    # the chance reference travels with the numbers rather than being
     # looked up later, so no table can report R@K without it.
     reference = random_retrieval_reference(int(sim.shape[1]), ks)
     out.update({k: v for k, v in reference.items() if k.startswith("random_")})

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Phase C section 5: compress the qualitative material into single figures.
+"""compress the qualitative material into single figures.
 
     python scripts/make_compact_figures.py [--what retrieval,cases]
 

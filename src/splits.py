@@ -271,8 +271,8 @@ def build_mtat_splits(cfg, validate_audio: bool = False) -> pd.DataFrame:
             "track_id": f"mtat_{clip_id}",
             "artist_id": _slug(artist) or f"mtat_unknown_{clip_id}",
             "audio_path": str(audio_root / rel),
-            # A0.6: metadata only. Putting the tags here would let Task 1 read
-            # its own labels out of Xtext -- degenerate, and a grader will spot it.
+            # metadata only. Putting the tags here would let Task 1 read
+            # its own labels out of Xtext, which is degenerate by construction.
             "text": mtat_metadata_text(title, album, artist),
             "split": split,
             "y_genre": -1,
@@ -379,7 +379,7 @@ def build_fma_splits(cfg, validate_audio: bool = False) -> pd.DataFrame:
         if split is None:
             continue
         if int(track_id) in excluded:
-            # A1.3: a truncated mp3 would decode to silence or throw mid-extraction;
+            # a truncated mp3 would decode to silence or throw mid-extraction;
             # either way it is not a data point.
             skipped_errata += 1
             continue
@@ -636,7 +636,7 @@ def build_musiccaps_splits(cfg, verify_decode: bool = True) -> pd.DataFrame:
     val_ids = set(rng.permutation(train_ids)[:n_val].tolist())
     manifest.loc[manifest["track_id"].isin(val_ids), "split"] = "val"
 
-    # A0.6: the caption is written *from* the aspect list, so the headline run
+    # the caption is written *from* the aspect list, so the headline run
     # must not see the labels in its own input. Both variants go to a sidecar
     # and `data.text_source` picks one at load time.
     import ast
@@ -915,7 +915,7 @@ def build_all_splits(cfg, validate_audio: bool = False,
 
 
 # --------------------------------------------------------------------------- #
-# A2 -- cross-corpus reconciliation, the LMD inventory, and the summary payload
+# cross-corpus reconciliation, the LMD inventory, and the summary payload
 # --------------------------------------------------------------------------- #
 def musiccaps_train_ytids(cfg) -> set:
     """YouTube ids on the MusicCaps **train** split, per the built manifest.
@@ -1223,7 +1223,7 @@ def split_summary(frames: "dict[str, pd.DataFrame]", extra: dict | None = None) 
 
 
 # --------------------------------------------------------------------------- #
-# A0.6 -- Xtext sources, and stripping label surface forms out of captions
+# Xtext sources, and stripping label surface forms out of captions
 # --------------------------------------------------------------------------- #
 TEXT_SOURCES = ("caption_masked", "caption_raw", "metadata")
 
@@ -1309,7 +1309,7 @@ def strip_aspect_terms(caption: str, aspects: "Sequence[str]",
     MusicCaps captions are written *from* the aspect list, so the labels appear
     almost verbatim in the text. Training Task 1 on the raw caption to predict
     those same aspects measures string matching, not music understanding -- a
-    grader will spot it immediately. This produces the masked variant used for
+    result is not a measure of understanding. This produces the masked variant used for
     the headline number; the raw variant is kept only to quantify the inflation.
 
     Longest phrases are removed first, so "soft female vocal" is masked as a
@@ -1454,7 +1454,7 @@ def main(argv=None) -> int:
                          if name in pruned else frame)
                   for name, frame in frames.items()}
 
-    # A7.3: both vocabularies are selected on the TRAIN split only. Picking
+    # both vocabularies are selected on the TRAIN split only. Picking
     # which labels exist by frequency over the whole corpus lets test-split
     # annotations decide the label space -- label information crossing the split
     # boundary before any parameter is trained.

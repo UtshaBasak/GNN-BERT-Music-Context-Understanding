@@ -163,14 +163,14 @@ class DataBundle:
                 LOGGER.warning("no feature cache for %s -- those rows will fail to load",
                                missing)
 
-        # A0.6: swap `text` for the configured Xtext variant before anything
+        # swap `text` for the configured Xtext variant before anything
         # tokenises it. Doing it here means every task, every script and every
         # notebook sees the same choice.
         if not synthetic:
             self.manifest = apply_text_source(self.manifest, cfg)
         self.text_source = str(cfg.get("data", {}).get("text_source", "caption_masked"))
 
-        # B1.2: train-only valence/arousal statistics, cached beside the splits
+        # train-only valence/arousal statistics, cached beside the splits
         # and injected into cfg so the loss and the metrics both see them.
         self.emotion_stats = self._emotion_stats()
         if self.emotion_stats:
@@ -697,7 +697,7 @@ def run_task3(cfg, args, bundle: DataBundle, device) -> dict:
 
     return _fit(model, loaders, cfg, args, device, task=3, step_fn=step,
                 tokenizer=tokenizer, tag_vocab=bundle.tag_vocab,
-                # B1.2: emotion is auxiliary, so selection follows the tagging
+                # emotion is auxiliary, so selection follows the tagging
                 # metric. Early-stopping on a blended score would let a
                 # collapsing tag head hide behind a good regression fit.
                 early_stop_metric="macro_f1",
@@ -979,7 +979,7 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
                                 extra={"thresholds": None if thresholds is None else
                                        np.asarray(thresholds).tolist(),
                                        "tag_vocab": list(tag_vocab),
-        # C4: lets a result produced on another machine be checked for
+        # lets a result produced on another machine be checked for
         # comparability without shipping the vocabulary alongside it
         "tag_vocab_hash": vocabulary_hash(tag_vocab),
                                        "provenance": provenance})
@@ -999,7 +999,7 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
         collected = collect_scores(model, loaders["test"], device, cfg, task, tokenizer)
         test_metrics = tagging_metrics(collected, best_thresholds)
         test_metrics.update(emotion_metrics(collected, cfg=cfg))
-        # A7.4: the bootstrap found the val-tuned operating point unstable on a
+        # the bootstrap found the val-tuned operating point unstable on a
         # 977-clip validation split, so the untuned number travels with it.
         if best_thresholds is not None and collected["targets"].size:
             test_metrics["macro_f1_fixed_half"] = M.macro_f1(
@@ -1014,7 +1014,7 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
         if collected.get("genre_logits") is not None:
             test_metrics.update(M.multiclass_metrics(
                 collected["genres"], collected["genre_logits"], prefix="genre_"))
-        # A7.4: keep the raw val/test score matrices of the *selected* model.
+        # keep the raw val/test score matrices of the *selected* model.
         # Bootstrapping the threshold tuner needs them, and re-running training
         # 100 times to get them would be absurd. The val pass is repeated here
         # rather than cached from the loop because early stopping may have

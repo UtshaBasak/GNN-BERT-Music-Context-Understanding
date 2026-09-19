@@ -444,7 +444,7 @@ def build_macros() -> dict:
                     "ZeroShotSup", "ZeroShotGap", "ZeroShotClips"):
             macros[key] = PENDING
 
-    # ---- D4 figure captions ------------------------------------------- #
+    # ---- figure captions ------------------------------------------- #
     # The panels each print their own probe numbers, but the caption has to
     # state them too: a reader should not have to squint at a subplot title to
     # learn that the silhouette is negative.
@@ -473,7 +473,7 @@ def build_macros() -> dict:
     cases = load("case_studies.json") or {}
     macros["CaseStudyNote"] = (cases.get("caption_note") or PENDING)
 
-    # ---- A7.4 threshold bootstrap -------------------------------------- #
+    # ---- threshold bootstrap -------------------------------------- #
     boot = load("threshold_bootstrap.json")
 
     def fixed_half(*names):
@@ -585,7 +585,7 @@ def build_macros() -> dict:
             macros[key] = PENDING
 
     # ----------------------------------------------------------------- #
-    # D2 -- DEAM valence/arousal. An explicit PDF deliverable that every Task 3
+    # DEAM valence/arousal. An explicit PDF deliverable that every Task 3
     # run had already written and no macro had ever read. The headline is the
     # full-budget run; the seed spread comes from the three fixed-budget
     # ablation runs of the same mode, because valence turns out to be far less
@@ -633,7 +633,7 @@ def build_macros() -> dict:
             macros[key] = PENDING
 
     # ----------------------------------------------------------------- #
-    # D3 -- Task 3 full-budget headline, and the baselines as macros.
+    # Task 3 full-budget headline, and the baselines as macros.
     # The main table carried "Phase B" where the T3 row belongs, and its B1/B4
     # numbers were literals copied from the pre-normalisation baseline run.
     # ----------------------------------------------------------------- #

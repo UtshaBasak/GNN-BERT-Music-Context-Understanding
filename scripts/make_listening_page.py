@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""B4: build the listening study -- sheet key, and a self-contained HTML page.
+"""Build the listening study -- sheet key, and a self-contained HTML page.
 
     python scripts/make_listening_page.py [--n-items 20] [--n-controls 4]
 

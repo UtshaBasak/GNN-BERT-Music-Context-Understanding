@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""A7.1: render the FMA-small genre confusion matrix as a report figure.
+"""render the FMA-small genre confusion matrix as a report figure.
 
     python scripts/plot_genre_confusion.py
 

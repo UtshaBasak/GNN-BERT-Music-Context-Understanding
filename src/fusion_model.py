@@ -310,7 +310,7 @@ def masked_multitask_loss(out: dict, batch, cfg, magnitudes: "_RunningMagnitude 
     alpha = float(mt_cfg.get("alpha_valence", 1.0))
     beta = float(mt_cfg.get("beta_arousal", 1.0))
     auto_balance = bool(mt_cfg.get("auto_balance", True))
-    # B1.2: targets are standardised with TRAIN-split statistics before the MSE.
+    # targets are standardised with TRAIN-split statistics before the MSE.
     # Raw 1-9 valence produces squared errors of 4-10 against per-tag BCE near
     # 0.2, so without this the emotion heads take essentially all the gradient.
     emotion_stats = ((mt_cfg.get("emotion_stats") or {})

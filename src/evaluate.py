@@ -587,7 +587,7 @@ def export_retrieval_examples(bundle: DataBundle, cfg, device, seed: int,
     """Ten qualitative retrieval examples, at least two of them failures.
 
     Failure cases are chosen deliberately -- a qualitative section made only of
-    successes is not evidence, and the rubric asks for honest error analysis.
+    successes is not evidence of anything but selection.
     """
     from .bert_encoder import BertTextEncoder, load_tokenizer
     from .contrastive import DualEncoder, build_similarity_matrix
@@ -1011,7 +1011,7 @@ def _collect_embeddings(bundle, cfg, device, seed: int):
         _load_compatible(model, payload["model_state"])
     model.eval()
 
-    # B0.5: the mood definitions come from config, not from a literal here. The
+    # the mood definitions come from config, not from a literal here. The
     # midpoint in particular was hardcoded at 5, which is right for DEAM's 1-9
     # scale and would silently be wrong for any other annotation range.
     mood_cfg = cfg.get("mood", {}) if cfg else {}

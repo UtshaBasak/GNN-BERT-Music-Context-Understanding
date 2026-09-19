@@ -22,20 +22,20 @@ help:
 	@echo "  verify-data   check every dataset path, count files, report MusicCaps survival"
 	@echo "  splits        build data/splits/*_manifest.csv from the raw corpora"
 	@echo "  features      extract the 96-dim segment cache into data/processed/features.h5"
-	@echo "  graphs        export >= 20 sample graphs (graded deliverable)"
+	@echo "  graphs        export >= 20 sample graphs as runnable examples"
 	@echo "  smoke         acceptance criteria 4-8 on synthetic data, CPU"
 	@echo "  task1..task4  train one task            (DEVICE=cuda SEED=42 EPOCHS=10)"
 	@echo "  all-tasks     train all four, all seeds from config.eval.seeds"
 	@echo "  baselines     B1 random/majority, B2 CNN, B4 PCA+MLP"
 	@echo "  evaluate      regenerate every table and plot into results/"
-	@echo "  graph-sanity  A4.4 gate: do similarity edges reach repeated sections?"
-	@echo "  probe-env     A0.2 check BERT checkpoints load with working attentions"
-	@echo "  probe-vram    A0.4 measure real peak VRAM per config on this GPU"
+	@echo "  graph-sanity  do similarity edges reach repeated sections?"
+	@echo "  probe-env     check BERT checkpoints load with working attentions"
+	@echo "  probe-vram    measure real peak VRAM per config on this GPU"
 	@echo "  kaggle-payload build the upload archive (graphs + text, never mel caches)"
-	@echo "  kaggle-payload-ablation  C4 archive: feature caches + splits + code"
-	@echo "  mel-cache     A7.2 full-resolution mel cache for B2 (~5.8 GB, ~45 min)"
-	@echo "  vocab         A7.3 re-derive both tag vocabularies, train split only"
-	@echo "  thresholds    A7.4 bootstrap the val-tuned thresholds (100 replicates)"
+	@echo "  kaggle-payload-ablation  archive: feature caches + splits + code"
+	@echo "  mel-cache     full-resolution mel cache for B2 (~5.8 GB, ~45 min)"
+	@echo "  vocab         re-derive both tag vocabularies, train split only"
+	@echo "  thresholds    bootstrap the val-tuned thresholds (100 replicates)"
 	@echo "  report        fill and structurally check report/final_report.tex"
 	@echo "  test          pytest"
 	@echo "  clean         remove caches, checkpoints and generated results"
@@ -120,7 +120,7 @@ kaggle-payload-ablation:
 	$(PYTHON) scripts/make_kaggle_payload.py --config $(CONFIG) --no-graphs \
 		--include-features --out kaggle_payload_ablation.tar.gz
 
-# ---- A7 -------------------------------------------------------------------
+# ---- -------------------------------------------------------------------
 # B2 reads mels_full_{corpus}.h5, not the 256-column pooled cache. Building it
 # is the expensive prerequisite for the CNN baseline being worth reporting.
 mel-cache:

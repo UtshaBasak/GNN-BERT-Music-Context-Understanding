@@ -639,7 +639,7 @@ def test_agreement_flags_non_discriminating_raters():
 
 
 # --------------------------------------------------------------------------- #
-# A0.1 -- the synthetic-artifact guard
+# the synthetic-artifact guard
 # --------------------------------------------------------------------------- #
 def test_detect_provenance_reads_the_explicit_field():
     from src.utils import REAL, SYNTHETIC, detect_provenance
@@ -733,7 +733,8 @@ def test_real_graphs_default_to_real_provenance():
 
 
 def test_export_sample_graphs_refuses_synthetic_without_the_flag(synthetic, tmp_path):
-    """The committed sample graphs are graded; a fake one is a submission failure."""
+    """The committed sample graphs stand in for the corpora; a synthetic one
+    would misrepresent what the pipeline produces."""
     import subprocess
     import sys
 
@@ -777,7 +778,7 @@ def test_training_results_record_provenance(cfg_overrides):
 
 
 # --------------------------------------------------------------------------- #
-# A0.5 -- item-level resumability and atomic writes
+# item-level resumability and atomic writes
 #
 # These are the tests that matter for a pipeline run across many sessions: the
 # long jobs WILL be interrupted, and the only acceptable behaviour is to lose at
@@ -1014,7 +1015,7 @@ def test_musiccaps_download_skips_existing_good_files(tmp_path):
 
 
 # --------------------------------------------------------------------------- #
-# A0.6 -- Xtext sources and aspect stripping
+# Xtext sources and aspect stripping
 #
 # The failure this guards against is degenerate supervision: MusicCaps captions
 # are written FROM the aspect list, so training on the raw caption to predict
@@ -1215,7 +1216,7 @@ def test_mtat_manifest_text_is_not_the_tag_string():
 
 
 # --------------------------------------------------------------------------- #
-# A3.6 -- normalisation statistics must be provably train-only
+# normalisation statistics must be provably train-only
 # --------------------------------------------------------------------------- #
 def test_norm_stats_files_record_train_provenance():
     """Every persisted norm_stats file must say, in the file, that it is train."""
@@ -1285,7 +1286,7 @@ def test_data_bundle_refuses_non_train_norm_stats(tmp_path):
 
 
 # --------------------------------------------------------------------------- #
-# A4.4 -- the graph sanity gate
+# the graph sanity gate
 # --------------------------------------------------------------------------- #
 def test_repetition_score_detects_repeated_structure():
     from scripts.graph_sanity import repetition_score
@@ -1613,7 +1614,7 @@ def test_recovered_results_are_stamped():
 
 
 # --------------------------------------------------------------------------- #
-# A7.2 -- the mel CNN, rebuilt without the parameter-matching constraint
+# the mel CNN, rebuilt without the parameter-matching constraint
 # --------------------------------------------------------------------------- #
 def test_mel_cnn_refuses_the_parameter_matching_constraint():
     """The constraint that produced 0.1654 must not be reachable by accident."""
@@ -1728,7 +1729,7 @@ def test_chunked_mel_random_draw_changes_with_the_epoch(tmp_path):
 
 
 # --------------------------------------------------------------------------- #
-# A7.1 -- the genre task path
+# the genre task path
 # --------------------------------------------------------------------------- #
 def test_masked_genre_loss_ignores_unlabelled_rows():
     """A -1 genre must be excluded, never trained as class 0."""
@@ -1782,7 +1783,7 @@ def test_task2_target_is_validated():
 
 
 # --------------------------------------------------------------------------- #
-# A7.3 -- a result scored against the old vocabulary must not reach the report
+# a result scored against the old vocabulary must not reach the report
 # --------------------------------------------------------------------------- #
 def test_report_refuses_results_from_a_different_tag_vocabulary(monkeypatch):
     """The failure mode this guards is silent, which is why it needs a test.
@@ -1827,7 +1828,7 @@ def test_report_macros_never_invent_a_number():
 
 
 # --------------------------------------------------------------------------- #
-# B0.6 -- the page limit is a submission requirement, so it must fail loudly
+# the page limit is a submission requirement, so it must fail loudly
 # --------------------------------------------------------------------------- #
 def _tex(body: str) -> str:
     return ("\\documentclass[conference]{IEEEtran}\n\\begin{document}\n"
@@ -1936,7 +1937,7 @@ def test_appendix_material_is_counted_separately(tmp_path):
 
 
 def test_rewiring_control_is_reproducible_across_dataset_instances(tmp_path):
-    """B0.1: the control must be identical run to run, or it measures nothing.
+    """the control must be identical run to run, or it measures nothing.
 
     Python randomises string hashing per process, so a track-id-seeded rewire
     built on `hash()` would silently differ between runs.
@@ -1981,7 +1982,7 @@ def test_rewiring_control_is_reproducible_across_dataset_instances(tmp_path):
 
 
 # --------------------------------------------------------------------------- #
-# B1.2 -- DEAM imbalance and target scale
+# DEAM imbalance and target scale
 # --------------------------------------------------------------------------- #
 def test_emotion_stats_refuse_any_split_but_train():
     import pandas as pd
@@ -2060,7 +2061,7 @@ def test_alternating_loader_honours_the_batch_ratio():
 
 
 # --------------------------------------------------------------------------- #
-# B1.3 -- the noise floor governs what the ablation may claim
+# the noise floor governs what the ablation may claim
 # --------------------------------------------------------------------------- #
 def _ablation_rows(mode, values):
     return [{"mode": mode, "corpus": "mtat", "seed": seed,
@@ -2223,7 +2224,7 @@ def test_control_discrimination_flags_an_uninformative_study():
 
 
 # --------------------------------------------------------------------------- #
-# Phase C -- checkpoints must carry the run tag.
+# checkpoints must carry the run tag.
 #
 # Without it, the seven fusion modes of the ablation each overwrite the last,
 # and the case studies -- which need one specific MusicCaps model -- silently
@@ -2295,7 +2296,7 @@ def test_the_best_checkpoint_is_tagged_and_the_last_one_is_not(tmp_path):
 
 
 # --------------------------------------------------------------------------- #
-# C4 -- sharding must be exact, and imports must be comparable
+# sharding must be exact, and imports must be comparable
 # --------------------------------------------------------------------------- #
 def test_ablation_shards_cover_every_run_exactly_once():
     """Two shards run in separate processes and cannot see each other.
@@ -2423,24 +2424,22 @@ def test_control_caption_reuse_is_detected():
 
 
 # --------------------------------------------------------------------------- #
-# D0.1 -- the synthetic report pipeline stays quarantined
+# the report has exactly one source
 # --------------------------------------------------------------------------- #
-def test_synthetic_report_pipeline_stays_quarantined():
-    """A 24-page Matplotlib PDF built from synthetic metrics sat at the exact
-    path the assignment requires, looking like a satisfied deliverable. The
-    markdown preview pipeline that produced it is retired; only the operator's
-    Overleaf export may write report/final_report.pdf."""
+def test_the_retired_markdown_report_generator_stays_retired():
+    """`final_report.tex` is the only source of report prose.
+
+    An earlier markdown pipeline rendered a second version of the report from a
+    metrics file, which is how a figure built on smoke-test data reached a
+    PDF and stayed there across three revisions. Two sources of prose means one
+    of them is always stale, and nothing tells you which.
+    """
     report = project_root() / "report"
     for gone in ("final_report.md", "build_report.py"):
         assert not (report / gone).exists(), (
-            f"report/{gone} is back. It is retired: the .tex is the only report "
-            "source, and a second generator is how the stale synthetic PDF "
-            "survived three revisions at the deliverable path."
+            f"report/{gone} is back. The .tex is the only report source; a "
+            "second generator is how a stale figure gets published."
         )
-    quarantine = project_root() / "results" / "_synthetic_smoke"
-    assert (quarantine / "final_report_SYNTHETIC.pdf").exists(), (
-        "the quarantined synthetic PDF is missing; it is kept as evidence"
-    )
 
 
 # --------------------------------------------------------------------------- #

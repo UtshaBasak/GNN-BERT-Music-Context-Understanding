@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""A7.4: how much do val-tuned decision thresholds actually move?
+"""how much do val-tuned decision thresholds actually move?
 
     python scripts/threshold_bootstrap.py [--n-boot 100] [--pattern "*_scores.npz"]
 

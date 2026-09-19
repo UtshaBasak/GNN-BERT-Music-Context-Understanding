@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""B0.1: does the graph topology actually carry signal?
+"""does the graph topology actually carry signal?
 
     python scripts/structural_controls.py [--domains genre,tags] [--seeds 42]
 

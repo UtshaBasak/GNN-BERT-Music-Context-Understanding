@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""A7.2: build a **full-resolution** log-mel cache for the CNN baseline.
+"""build a **full-resolution** log-mel cache for the CNN baseline.
 
     python scripts/build_mel_cache.py --datasets mtat,fma --workers 6
 

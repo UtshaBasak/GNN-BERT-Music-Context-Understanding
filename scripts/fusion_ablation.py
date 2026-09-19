@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""B1.3: the seven-mode Task 3 fusion ablation, run under the noise-floor rule.
+"""the seven-mode Task 3 fusion ablation, run under the noise-floor rule.
 
     python scripts/fusion_ablation.py --corpus mtat --seeds 42,1337,2024
     python scripts/fusion_ablation.py --summary-only          # re-tabulate
@@ -37,7 +37,7 @@ from src.utils import ensure_dir, get_logger, project_root, save_json  # noqa: E
 
 LOGGER = get_logger("gbmc.ablation")
 
-#: A7.4, 100 validation resamples on MTAT. Differences below this are noise.
+#: 100 validation resamples on MTAT. Differences below this are noise.
 NOISE_FLOOR = 0.0288
 
 CORPORA = {

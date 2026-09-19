@@ -204,7 +204,7 @@ def check(path: Path) -> list[str]:
         problems.append(f"{n_pending} macro(s) still render as pending "
                         "(run report/fill_report.py once the runs finish)")
 
-    # B0.6: the page limit is a submission requirement, so exceeding it is a
+    # the page limit is a submission requirement, so exceeding it is a
     # failure rather than a note. Being under the minimum is reported too, but
     # only as information -- an unfinished draft is expected to be short.
     est = estimate(path)

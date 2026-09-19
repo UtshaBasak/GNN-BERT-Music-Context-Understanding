@@ -248,7 +248,7 @@ def _sanitise(obj: Any) -> Any:
     """Replace non-finite floats with ``None`` so the output is valid JSON.
 
     ``json.dump`` happily writes bare ``NaN``/``Infinity``, which Python reads
-    back but every strict parser -- and the graders' notebooks -- rejects. A
+    back but every strict parser rejects. A
     missing metric is genuinely null, so this is also the more honest encoding.
     """
     if isinstance(obj, float):

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""A0.2 — check that the BERT checkpoints we actually use load and work.
+"""check that the BERT checkpoints we actually use load and work.
 
 Run this before spending Kaggle hours. It verifies, per model, that the
 tokenizer loads and is a *fast* one, that the body loads, and that attention

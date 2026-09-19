@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""A0.4 — measure real peak VRAM for every configuration we might train locally.
+"""measure real peak VRAM for every configuration we might train locally.
 
 The Day 1-2 figures (302 MB / 297 MB) were measured with a 2-layer, 64-dim test
 encoder, not a real BERT, and are worthless for capacity planning. This runs a

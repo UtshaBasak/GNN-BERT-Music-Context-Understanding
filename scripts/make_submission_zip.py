@@ -10,7 +10,7 @@ committed after the last build. It also prints what it excluded, so an omission
 is a visible decision rather than an accident.
 
 Re-run this after compiling the report PDF and committing it, or the archive
-will be missing the one deliverable a grader looks for first.
+will be missing the report, which is the first thing most readers open.
 """
 from __future__ import annotations
 
@@ -26,24 +26,12 @@ from src.utils import get_logger, project_root  # noqa: E402
 
 LOGGER = get_logger("gbmc.submission")
 
-#: quarantined synthetic-smoke artifacts; see that directory's README
-EXCLUDE_PREFIXES = ("results/_synthetic_smoke/",)
+EXCLUDE_PREFIXES = ()
 
-#: Internal working documents. They record how the project was run rather than
-#: what it produced, none is referenced by the paper, and the two logs in
-#: particular are phase-by-phase development notes that a marker has no reason
-#: to read. Everything the paper cites stays in -- notably report/fill_report.py,
-#: which Appendix A names by path, and data/raw/README.md, which is the only
-#: reason data/raw/ exists in a checkout at all.
+#: Development documents that live in the repository for maintainers but add
+#: nothing to a packaged release.
 EXCLUDE_FILES = frozenset({
-    "KAGGLE_RUNBOOK.md",
-    "PROGRESS.md",
     "report/README.md",
-    "state/SESSION_LOG.md",
-    "state/SUBMISSION_CHECKLIST.md",
-    "state/env_report.md",
-    "state/kaggle_c4_instructions.md",
-    "state/vram_report.md",
 })
 
 #: the five items the brief requires, and where each lives
@@ -77,7 +65,7 @@ def main(argv=None) -> int:
 
     out = Path(args.out) if args.out else (
         root.parent / "SUBMISSION" /
-        f"submission_CSE425_{root.name.replace('-', '_')}.zip")
+        f"{root.name.replace('-', '_')}_release.zip")
     out.parent.mkdir(parents=True, exist_ok=True)
 
     kept, skipped, absent = [], [], []

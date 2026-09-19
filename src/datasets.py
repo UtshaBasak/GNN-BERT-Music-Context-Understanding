@@ -115,7 +115,7 @@ class MusicGraphDataset(Dataset):
         self.tag_vocab = list(tag_vocab) if tag_vocab is not None else self._infer_vocab()
         self.tag_index = {tag: i for i, tag in enumerate(self.tag_vocab)}
         self._store = None          # opened lazily, per worker
-        # B0.1: rewired edges are deterministic per track, so they are computed
+        # rewired edges are deterministic per track, so they are computed
         # once and reused. Measured: rewiring on the fly costs 43.7 s/epoch
         # against a 9.5 s baseline on FMA-small, all of it Python-level double
         # edge swaps recomputing an identical answer.
