@@ -565,9 +565,7 @@ Department of Computer Science and Engineering, BRAC University
 
 ## License
 
-No licence is currently declared for this code, which under default copyright
-means all rights are reserved. If you intend others to reuse it, add a `LICENSE`
-file — MIT is the usual choice for academic code of this kind.
+The code in this repository is released under the MIT License; see `LICENSE`.
 
 The corpora are not redistributed here and remain under their own terms:
 MagnaTagATune, FMA, DEAM, MusicCaps and Lakh MIDI Clean each carry separate

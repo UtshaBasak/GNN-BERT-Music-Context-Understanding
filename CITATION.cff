@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+title: >-
+  Segment Graphs and Language Models for Music Context Understanding:
+  A Multi-Task Study with Explicit Leakage Accounting
+message: If you use this software or its findings, please cite it.
+type: software
+authors:
+  - given-names: Utsha
+    family-names: Basak
+    email: utsha23basak@gmail.com
+    affiliation: BRAC University
+  - given-names: Mohammad Tanvir
+    family-names: Hossain
+    affiliation: BRAC University
+  - given-names: Nabil
+    family-names: Mahmud
+    affiliation: BRAC University
+repository-code: https://github.com/UtshaBasak/GNN-BERT-Music-Context-Understanding
+abstract: >-
+  A hybrid BERT and graph neural network system for music context
+  understanding. Each track is represented as a segment graph whose nodes carry
+  a fixed 96-dimensional descriptor and whose edges combine a temporal chain
+  with k-nearest-neighbour similarity links. One representation supports four
+  tasks: text-only tagging, graph-only genre classification, cross-attention
+  fusion with multi-task emotion regression, and contrastive graph-caption
+  retrieval, across four public corpora totalling 35,984 tracks. The study
+  quantifies three sources of optimistic bias that are usually inherited rather
+  than measured: caption-to-label leakage on MusicCaps worth 0.1963 macro-F1,
+  a MagnaTagATune split that is not artist-disjoint, and test-split information
+  entering the label vocabulary through corpus-wide frequency selection.
+keywords:
+  - music information retrieval
+  - graph neural networks
+  - multi-task learning
+  - label leakage
+  - automatic tagging
+  - cross-modal retrieval
+license: MIT
