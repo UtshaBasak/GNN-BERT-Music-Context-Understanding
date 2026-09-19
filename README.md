@@ -18,10 +18,46 @@ before the real feature caches exist.
 
 ---
 
-## Four things this project does differently, and why
+## Results
 
-Each of these was measured, not assumed, and each changed a number that was
-already written down. They are the parts most worth copying.
+Four public corpora, 35,984 tracks, 107,952 stored graphs. Every figure below is
+generated from `results/*.json`; none is transcribed by hand.
+
+| Task | Result | Reference point |
+|---|---|---|
+| **T1** tagging, MusicCaps | 0.3707 macro-F1 | masked text; raw captions reach 0.5670 — see below |
+| **T2** genre, FMA-small | 43.7% ± 1.8 accuracy, 0.4315 macro-F1 | 12.5% chance; 292,616 parameters |
+| **T2** tagging, MagnaTagATune | 0.3737 macro-F1 | +0.0591 over a no-graph control on identical features |
+| **T3** fusion, MagnaTagATune | 0.3588 macro-F1 | 7 modes × 3 seeds; 5 within the measurement floor |
+| **T3** emotion, DEAM | arousal R² 0.478, valence R² 0.311 | 275 test tracks, jointly trained |
+| **T4** retrieval, MusicCaps | R@10 0.0175 | 4.4× chance over a 2,503-clip gallery |
+
+Three findings are worth more than the scores.
+
+**Caption-to-label leakage is large and measurable.** MusicCaps captions are
+written *from* the aspect list that also supplies the labels. Two runs identical
+except for whether those label terms are masked out of the input differ by
+**+0.1963 macro-F1, a 53% relative inflation**. The masked number is the one
+reported.
+
+**Which modality dominates depends on the corpus.** The same architecture, run
+on two corpora: on MagnaTagATune, whose text channel is title and artist
+metadata, the graph carries the task (0.3588 against text's 0.1793); on
+MusicCaps, where the text is a written description, the ordering inverts
+(0.3095 against 0.1413). Fusion is worth what the second modality contributes,
+and no single-corpus study can show that.
+
+**The measurement floor is quantified, then respected.** Resampling the
+validation split 100 times moves the tuned test macro-F1 over a range of
+**0.0262**. Differences smaller than that are reported as indistinguishable
+rather than ranked.
+
+---
+
+## Key design choices
+
+Each of these was measured rather than assumed, and each changed a number that
+had already been written down.
 
 **1. The label vocabulary is chosen on the training split.** Ranking tag
 frequency over a whole corpus lets test-split annotations decide which labels
@@ -72,10 +108,11 @@ python report/check_tex.py --update   # structural checks + page-count estimate
 The prose contains **no literal numbers** -- only macros, all defined in a
 generated block. A result that does not exist yet renders as *pending* and the
 script names it, so a stale figure cannot survive a re-run and a missing one
-cannot hide. The earlier markdown preview pipeline is retired and quarantined in
-`results/_synthetic_smoke/`: it had built a 24-page PDF from synthetic metrics
-that sat at the deliverable path for three revisions. `final_report.pdf` is now
-produced only by the operator's Overleaf compile -- see `report/README.md`.
+cannot hide.
+
+`results/_synthetic_smoke/` holds artifacts built from the synthetic smoke-test
+data. They are kept out of the report pipeline deliberately and should never be
+cited as results.
 
 ## Installation
 
@@ -161,11 +198,12 @@ make evaluate
 
 ---
 
-## Hardware constraints, and what they changed
+## Reference hardware
 
-The target machine is a **GTX 1650, 4 GB VRAM** (Turing TU117, sm_75, **no tensor
-cores**), an i5-11400H (6c/12t) and 16 GB of RAM. That is not a footnote; it
-determined several design decisions:
+Everything here was developed and measured on a **GTX 1650, 4 GB VRAM** (Turing
+TU117, sm_75, **no tensor cores**), an i5-11400H (6c/12t) and 16 GB of RAM. That
+budget is not a footnote — it determined several design decisions, and the
+project runs within it end to end:
 
 * **AMP everywhere.** `torch.amp.autocast` + `GradScaler` on every training loop.
   On sm_75 the speedup is modest — there are no tensor cores — but the activation
@@ -192,8 +230,9 @@ determined several design decisions:
 
 ## The frozen data contract
 
-Three people build against this in parallel. Do not change it without telling
-them.
+Every task reads the same structures, so changing any of them invalidates the
+cached features, the stored graphs and every result derived from them. The
+shapes below are asserted at load time.
 
 ### Segment graph — `torch_geometric.data.Data`
 
@@ -411,8 +450,9 @@ gnn-bert-music-context/
     final_report.pdf
 ```
 
-`data/processed/sample_graphs/` is the one binary directory that **is** committed —
-it is a graded deliverable.
+`data/processed/sample_graphs/` is the one binary directory that **is**
+committed: 20 real graphs, so the repository carries runnable examples without
+requiring the full 30 GB of source audio.
 
 ---
 
@@ -502,20 +542,7 @@ different network.
 
 ---
 
-## Publishing to GitHub
-
-The repository is `gnn-bert-music-context/`. **Push that directory, not its
-parent** — the parent holds ~30 GB of third-party audio, and because this
-directory already contains its own `.git`, a parent-level repo would record it
-as an unusable embedded gitlink and upload none of these files.
-
-```bash
-cd gnn-bert-music-context
-git remote add origin git@github.com:<you>/<repo>.git
-git push -u origin main
-```
-
-### What is deliberately excluded
+## What is not in this repository
 
 | Excluded | Why |
 |---|---|
@@ -526,18 +553,24 @@ git push -u origin main
 | every credential pattern | `.env`, `kaggle.json`, `*.pem`, `*.key`, `id_rsa*`, `.netrc`, `.aws/`, `.huggingface/`, … |
 
 `data/processed/sample_graphs/` is the **one** deliberate binary exception: 20
-real `.pt` graphs that are a graded deliverable, re-included after the `*.pt`
-rule. Roughly 35 MB is tracked in total, mostly manifest CSVs.
+real `.pt` graphs, re-included after the `*.pt` rule so the repository carries
+runnable examples. Roughly 35 MB is tracked in total, mostly manifest CSVs.
 
-### Audit before each push
+---
 
-```bash
-git status --porcelain                        # nothing unexpected staged
-git ls-files | xargs du -ch | tail -1         # total size sanity check
-git check-ignore -v <path>                    # explain any single path
-```
+## Authors
 
-Keep `.gitignore` current in the same commit that introduces a new tool, cache
-or credential file. `git rm --cached` untracks a file but does **not** remove it
-from history — if a secret is ever pushed, rotate it rather than trying to
-rewrite the past.
+Utsha Basak · Mohammad Tanvir Hossain · Nabil Mahmud
+Department of Computer Science and Engineering, BRAC University
+
+## License
+
+No licence is currently declared for this code, which under default copyright
+means all rights are reserved. If you intend others to reuse it, add a `LICENSE`
+file — MIT is the usual choice for academic code of this kind.
+
+The corpora are not redistributed here and remain under their own terms:
+MagnaTagATune, FMA, DEAM, MusicCaps and Lakh MIDI Clean each carry separate
+licences, and MusicCaps in particular ships YouTube identifiers rather than
+audio. See `scripts/download_*.sh` and `data/raw/README.md` for how to obtain
+them.
