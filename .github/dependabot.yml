@@ -1,0 +1,46 @@
+version: 2
+
+updates:
+  # GitHub Actions. Low volume, and the only dependencies here that genuinely
+  # rot: an action pinned to a major tag stops receiving fixes when the runner
+  # image moves on, and the failure shows up as a broken CI run rather than as
+  # anything in the code.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: ci
+    labels:
+      - dependencies
+
+  # Python, security advisories only.
+  #
+  # The pins in requirements.txt are not aspirational -- they record the
+  # versions the reported results were produced with, on the hardware named in
+  # the README. Routine version bumps would quietly invalidate that, so
+  # `versioning-strategy: increase-if-necessary` keeps Dependabot from opening
+  # a pull request unless a pin actually has to move.
+  #
+  # Note that `torch==2.14.0+cu126` resolves only from the PyTorch CUDA index
+  # declared at the top of requirements.txt. Dependabot may not be able to
+  # resolve that pin; if it reports a failure against torch, ignore it rather
+  # than loosening the pin.
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: monthly
+    versioning-strategy: increase-if-necessary
+    open-pull-requests-limit: 3
+    groups:
+      python-dependencies:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: deps
+    labels:
+      - dependencies
+    ignore:
+      # pinned to the CUDA build the results were measured on
+      - dependency-name: torch
+      - dependency-name: torch-geometric
