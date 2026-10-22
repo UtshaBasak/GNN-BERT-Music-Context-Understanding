@@ -558,11 +558,6 @@ runnable examples. Roughly 35 MB is tracked in total, mostly manifest CSVs.
 
 ---
 
-## Authors
-
-Utsha Basak · Mohammad Tanvir Hossain · Nabil Mahmud
-Department of Computer Science and Engineering, BRAC University
-
 ## License
 
 The code in this repository is released under the MIT License; see `LICENSE`.
