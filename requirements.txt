@@ -27,8 +27,8 @@
 # ---- deep learning ----------------------------------------------------------
 torch==2.14.0+cu126
 torch-geometric==2.8.0.post1
-transformers==5.17.0
-tokenizers==0.23.2
+transformers==5.21.0
+tokenizers==0.23.3
 safetensors==0.8.0
 
 # ---- audio ------------------------------------------------------------------
@@ -37,9 +37,9 @@ soundfile==0.14.0
 pretty_midi==0.2.11.post0
 
 # ---- scientific stack -------------------------------------------------------
-numpy==2.5.3
+numpy==2.5.4
 scipy==1.18.1
-pandas==3.0.6
+pandas==3.1.0
 scikit-learn==1.9.1
 h5py==3.16.0
 networkx==3.7
@@ -49,12 +49,12 @@ matplotlib==3.11.2
 seaborn==0.13.2
 
 # ---- agreement statistics (human evaluation, Task 4) ------------------------
-krippendorff==0.8.2
+krippendorff==0.9.0
 
 # ---- tooling ----------------------------------------------------------------
 PyYAML==6.0.3
 tqdm==4.70.1
-pytest==9.1.1
+pytest==9.2.0
 jupyter==1.1.1
-wandb==0.30.0
-yt-dlp==2026.8.19
+wandb==0.31.0
+yt-dlp==2026.10.26
