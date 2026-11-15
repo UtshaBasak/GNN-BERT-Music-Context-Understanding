@@ -1,0 +1,36 @@
+# CircleCI runs the fast test suite with Smarter Testing (`circleci testsuite`), described in
+# .circleci/test-suites.yml. The install mirrors GitHub Actions: CPU torch first, then PyTorch
+# Geometric, then the rest of requirements.txt without the CUDA-only torch pins.
+# See: https://circleci.com/docs/guides/test/getting-started-with-smarter-testing/
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: cimg/python:3.12@sha256:a78dfb790fe48e58b792c6499495de0630d33edb377a92840e726d40320a33ea
+    resource_class: medium
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - pip-{{ checksum "requirements.txt" }}
+      - run:
+          name: Install torch (CPU), PyTorch Geometric and the requirements
+          command: |
+            python -m pip install --upgrade pip
+            pip install torch --index-url https://download.pytorch.org/whl/cpu
+            pip install torch-geometric
+            grep -vE '^(torch|torch-geometric)==|^--extra-index-url' requirements.txt > /tmp/ci-requirements.txt
+            pip install -r /tmp/ci-requirements.txt
+      - save_cache:
+          key: pip-{{ checksum "requirements.txt" }}
+          paths:
+            - ~/.cache/pip
+      - run:
+          name: Run the fast test suite
+          command: circleci testsuite run "pytest"
+
+workflows:
+  test:
+    jobs:
+      - test

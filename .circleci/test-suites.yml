@@ -1,0 +1,9 @@
+---
+# CircleCI Smarter Testing: the CircleCI job runs `circleci testsuite run "pytest"` after
+# installing the CPU dependencies. Test atoms are the test files; the slow tests are left out,
+# as in GitHub Actions. Results go to the job's Tests tab.
+name: pytest
+discover: find tests -type f -name 'test_*.py'
+run: python -m pytest -m "not slow" --tb=short --override-ini=junit_family=legacy --junit-xml="<< outputs.junit >>" << test.atoms >>
+options:
+  store-test-results: true
